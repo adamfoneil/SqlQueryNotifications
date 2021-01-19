@@ -12,5 +12,6 @@ namespace SqlQueryNotifications.Interfaces
     {
         Task<IEnumerable<Query>> GetQueriesAsync();
         SqlConnection GetConnection();
+        string SenderName { get; }
     }
 }
