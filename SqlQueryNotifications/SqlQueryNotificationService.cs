@@ -90,7 +90,7 @@ namespace SqlQueryNotifications
         {
             var msg = CreateMessage(senderName, query);
             _smtpClient.Send(msg);
-            _logger.LogInformation($"Sent empty result notification {msg.Subject} to {string.Join(", ", msg.To.Select(addr => addr.Address))}");
+            _logger.LogInformation($"Sent empty result notification \"{msg.Subject}\" to {RecipientList(msg)}");
         }
 
         private void NotifyOnDataResult(string senderName, Query query, DataTable data)
@@ -99,12 +99,13 @@ namespace SqlQueryNotifications
             msg.Body = DataTableToHtml(data, 50);
             msg.IsBodyHtml = true;
             _smtpClient.Send(msg);
-            _logger.LogInformation($"Sent data result notification {msg.Subject} to {string.Join(", ", msg.To.Select(addr => addr.Address))}");
+            _logger.LogInformation($"Sent data result notification \"{msg.Subject}\" to {RecipientList(msg)}");
         }
 
         private MailMessage CreateMessage(string senderName, Query query)
         {
-            if (!query.Recipients.Any()) throw new InvalidOperationException($"Query {query.Subject} must have at least one recipient");
+            if (!query.Recipients.Any()) throw new InvalidOperationException($"Query {query.Subject} must have at least one recipient.");
+            if (string.IsNullOrWhiteSpace(query.Subject)) throw new InvalidCastException($"Query {query.Sql} must have a subject.");
 
             var result = new MailMessage()
             {
@@ -122,6 +123,12 @@ namespace SqlQueryNotifications
             var rows = dataTable.AsEnumerable().Take(maxRows);
             var html = new HtmlBuilder();
 
+            html.StartTag("html");
+
+            html.StartTag("head");
+            html.EndTag();
+
+            html.StartTag("body");
             html.StartTag("table");
 
             html.StartTag("tr");
@@ -135,8 +142,12 @@ namespace SqlQueryNotifications
                 html.EndTag();
             }
 
-            html.EndTag();
+            html.EndTag(); // table
+            html.EndTag(); // body
+            html.EndTag(); // html
             return html.ToString();
         }
+
+        private string RecipientList(MailMessage msg) => string.Join(", ", msg.To.Select(addr => addr.Address));
     }
 }
