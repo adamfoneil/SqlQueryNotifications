@@ -15,3 +15,5 @@ See the [Query](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/
 5. Create a public endpoint (for example MVC action) in your web app that a cron job service can reach. This action should call the [ExecuteAsync](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/SqlQueryNotifications/SqlQueryNotificationService.cs#L39) like I do in my [test](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/Testing/QueryNotifications.cs#L73).
 
 Configure your cron job service to execute your notifications on a schedule that works for you. You should receive emails when queries execute with rules you set.
+
+![img](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/readme.png)
