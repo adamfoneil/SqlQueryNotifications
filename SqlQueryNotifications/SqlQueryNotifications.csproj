@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>AO.SqlQueryAlerts</PackageId>
+    <Authors>Adam O'Neil</Authors>
+    <Product>AO.SqlQueryAlerts</Product>
+    <Description>Alert developers and admins when queries produce certain results.</Description>
+    <RepositoryUrl>https://github.com/adamfoneil/SqlQueryNotifications</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
