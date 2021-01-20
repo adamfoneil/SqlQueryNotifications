@@ -10,7 +10,7 @@ There's also in this repo a [BlobQuerySource](https://github.com/adamfoneil/SqlQ
 
 See the [Query](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/SqlQueryNotifications/Models/Query.cs) class. Create `Query` objects to define your email contact info and the [rule](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/SqlQueryNotifications/Models/Query.cs#L8) causes emails to send or not.
 
-3. Create or inject an `SmtpClient`. This will be passed as an argument to the service. Here's [how I do it](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/Testing/QueryNotifications.cs#L51..L55) in my test.
+3. Create or inject an `SmtpClient`. This will be passed as an argument to the service. Here's [how I do it](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/Testing/QueryNotifications.cs#L56..L60) in my test.
 
 4. Optional, create or inject an `ILogger`, which is used to log any failures by the service itself. My test doesn't use this.
 
