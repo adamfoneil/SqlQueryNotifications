@@ -9,6 +9,8 @@
     <Description>Alert developers and admins by email when queries produce certain results.</Description>
     <RepositoryUrl>https://github.com/adamfoneil/SqlQueryNotifications</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Version>1.0.1</Version>
+    <PackageProjectUrl>https://github.com/adamfoneil/SqlQueryNotifications</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

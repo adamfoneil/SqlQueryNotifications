@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net50</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>AO.SqlQueryAlerts.Blob</PackageId>
+    <Authors>Adam O'Neil</Authors>
+    <Product>AO.SqlQueryAlerts.Blob</Product>
+    <Description>Use AO.SqlQueryAlerts with Azure Blob Storage as a query source</Description>
+    <RepositoryUrl>https://github.com/adamfoneil/SqlQueryNotifications</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/adamfoneil/SqlQueryNotifications</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
