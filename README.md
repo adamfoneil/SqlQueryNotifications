@@ -6,7 +6,7 @@ In one of the products I work on, we have an Azure queue processor that runs on 
 
 2. Create one or more queries that can trigger notifications along with relevant email subject and contact info by implementing [IQuerySource](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/SqlQueryNotifications/Interfaces/IQuerySource.cs). You have a lot of options as to how this can be done. The repo comes with a simple built-in [QuerySource](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/SqlQueryNotifications/QuerySource.cs) type for creating this inline in your application. You can see this in use in the [integration test](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/Testing/QueryNotifications.cs#L64).
 
-There's also in this repo a [BlobQuerySource](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/BlobQueryAlerts/BlobQuerySource.cs) and related [test](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/Testing/QueryNotifications.cs#L77).
+There's also in this repo a [BlobQuerySource](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/BlobQueryAlerts/BlobQuerySource.cs) and related [test](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/Testing/QueryNotifications.cs#L77). This will be part of a forthcoming `net50` package.
 
 See the [Query](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/SqlQueryNotifications/Models/Query.cs) class. Create `Query` objects to define your email contact info and the [rule](https://github.com/adamfoneil/SqlQueryNotifications/blob/master/SqlQueryNotifications/Models/Query.cs#L8) causes emails to send or not.
 
