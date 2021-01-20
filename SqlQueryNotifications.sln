@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlQueryNotifications", "SqlQueryNotifications\SqlQueryNotifications.csproj", "{B417669D-141A-4D23-BA00-6996BFF25DE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlQueryNotifications", "SqlQueryNotifications\SqlQueryNotifications.csproj", "{B417669D-141A-4D23-BA00-6996BFF25DE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{82759D25-74E0-434B-A753-FF82CD4BA48D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "Testing\Testing.csproj", "{82759D25-74E0-434B-A753-FF82CD4BA48D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlobQueryAlerts", "BlobQueryAlerts\BlobQueryAlerts.csproj", "{2DF01732-18CB-4983-B4B9-74898202BE02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{82759D25-74E0-434B-A753-FF82CD4BA48D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82759D25-74E0-434B-A753-FF82CD4BA48D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82759D25-74E0-434B-A753-FF82CD4BA48D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF01732-18CB-4983-B4B9-74898202BE02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF01732-18CB-4983-B4B9-74898202BE02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF01732-18CB-4983-B4B9-74898202BE02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF01732-18CB-4983-B4B9-74898202BE02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

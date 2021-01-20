@@ -57,15 +57,15 @@ namespace SqlQueryNotifications
                                     switch (query.SendRule)
                                     {
                                         case TriggerSendRule.IfAny when (data.AsEnumerable().Any()):
-                                            NotifyOnDataResult(querySource.SenderName, query, data);
+                                            NotifyOnDataResult(querySource.SenderEmail, query, data);
                                             break;
 
                                         case TriggerSendRule.IfEmpty when (!data.AsEnumerable().Any()):
-                                            NotifyOnEmptyResult(querySource.SenderName, query);
+                                            NotifyOnEmptyResult(querySource.SenderEmail, query);
                                             break;
 
                                         case TriggerSendRule.IfCustom when query.CustomSendRule?.Invoke(data) ?? false:
-                                            NotifyOnDataResult(querySource.SenderName, query, data);
+                                            NotifyOnDataResult(querySource.SenderEmail, query, data);
                                             break;
                                     }
 
@@ -107,11 +107,11 @@ namespace SqlQueryNotifications
 
         private void RemoveData(MailMessage msg) => InsertData(msg, string.Empty);        
 
-        private void NotifyOnDataResult(string senderName, Query query, DataTable data)
+        private void NotifyOnDataResult(string senderEmail, Query query, DataTable data)
         {
             try
             {
-                var msg = CreateMessage(senderName, query);
+                var msg = CreateMessage(senderEmail, query);
                 InsertData(msg, DataTableToHtml(data, 50));
                 msg.IsBodyHtml = true;
                 _smtpClient.Send(msg);
@@ -132,7 +132,7 @@ namespace SqlQueryNotifications
             {
                 From = new MailAddress(senderEmail),
                 Subject = query.Subject,
-                Body = $"<html><body><p>{query.BodyText}</>%data%</body></html>"
+                Body = $"<html><body><p>{query.BodyText}</p>%data%</body></html>"
             };
 
             foreach (var recip in query.Recipients) result.To.Add(new MailAddress(recip));

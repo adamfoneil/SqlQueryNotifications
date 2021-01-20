@@ -12,11 +12,11 @@ namespace SqlQueryNotifications
 
         public QuerySource(string senderName, string connectionString)
         {
-            SenderName = senderName;
+            SenderEmail = senderName;
             _connectionString = connectionString;
         }
 
-        public string SenderName { get; }
+        public string SenderEmail { get; }
 
         public SqlConnection GetConnection() => new SqlConnection(_connectionString);
         
