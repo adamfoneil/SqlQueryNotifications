@@ -6,14 +6,22 @@
     <PackageId>AO.SqlQueryAlerts</PackageId>
     <Authors>Adam O'Neil</Authors>
     <Product>AO.SqlQueryAlerts</Product>
-    <Description>Alert developers and admins when queries produce certain results.</Description>
+    <Description>Alert developers and admins by email when queries produce certain results.</Description>
     <RepositoryUrl>https://github.com/adamfoneil/SqlQueryNotifications</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DataTables.Library" Version="2.0.10" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="System.Text.Json" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
