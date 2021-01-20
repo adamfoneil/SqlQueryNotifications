@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SqlQueryNotifications
@@ -19,6 +20,9 @@ namespace SqlQueryNotifications
         private readonly IEnumerable<IQuerySource> _querySources;
         private readonly QueryRunner _queryRunner;
         private readonly ILogger<SqlQueryNotificationService> _logger;
+
+        // macro that indicates where data is inserted in HTML body
+        const string data = "%data%";
 
         public SqlQueryNotificationService(SmtpClient smtpClient, IEnumerable<IQuerySource> querySources, ILogger<SqlQueryNotificationService> logger, QueryRunner queryRunner = null)
         {
@@ -68,49 +72,67 @@ namespace SqlQueryNotifications
                                 }
                                 catch (Exception exc)
                                 {
-                                    _logger.LogError($"Query failed: {query.Subject}");
-                                    _logger.LogError(exc.Message);
+                                    _logger?.LogError($"Query failed: {query.Subject}");
+                                    _logger?.LogError(exc.Message);
                                 }
                             }
                         }
                     }
                     catch (Exception exc)
                     {
-                        _logger.LogError($"Connection failed: {exc.Message}");
+                        _logger?.LogError($"Connection failed: {exc.Message}");
                     }
                 }
             }
             catch (Exception exc)
             {
-                _logger.LogError($"Query source failed: {exc.Message}");
+                _logger?.LogError($"Query source failed: {exc.Message}");
             }            
         }
 
         private void NotifyOnEmptyResult(string senderName, Query query)
         {
-            var msg = CreateMessage(senderName, query);
-            _smtpClient.Send(msg);
-            _logger.LogInformation($"Sent empty result notification \"{msg.Subject}\" to {RecipientList(msg)}");
+            try
+            {
+                var msg = CreateMessage(senderName, query);
+                RemoveData(msg);
+                _smtpClient.Send(msg);
+                _logger?.LogInformation($"Sent empty result notification \"{msg.Subject}\" to {RecipientList(msg)}");
+            }
+            catch (Exception exc)
+            {
+                _logger?.LogError($"NotifyOnEmptyResult failed: {exc.Message}");
+            }
         }
+
+        private void RemoveData(MailMessage msg) => InsertData(msg, string.Empty);        
 
         private void NotifyOnDataResult(string senderName, Query query, DataTable data)
         {
-            var msg = CreateMessage(senderName, query);
-            msg.Body = DataTableToHtml(data, 50);
-            msg.IsBodyHtml = true;
-            _smtpClient.Send(msg);
-            _logger.LogInformation($"Sent data result notification \"{msg.Subject}\" to {RecipientList(msg)}");
+            try
+            {
+                var msg = CreateMessage(senderName, query);
+                InsertData(msg, DataTableToHtml(data, 50));
+                msg.IsBodyHtml = true;
+                _smtpClient.Send(msg);
+                _logger?.LogInformation($"Sent data result notification \"{msg.Subject}\" to {RecipientList(msg)}");
+            }
+            catch (Exception exc)
+            {
+                _logger?.LogError($"NotifyOnDataResult failed: {exc.Message}");
+            }
         }
 
-        private MailMessage CreateMessage(string senderName, Query query)
+        private MailMessage CreateMessage(string senderEmail, Query query)
         {
             if (!query.Recipients.Any()) throw new InvalidOperationException($"Query {query.Subject} must have at least one recipient.");
             if (string.IsNullOrWhiteSpace(query.Subject)) throw new InvalidCastException($"Query {query.Sql} must have a subject.");
 
             var result = new MailMessage()
             {
-                Sender = new MailAddress(senderName),
-                Subject = query.Subject
+                From = new MailAddress(senderEmail),
+                Subject = query.Subject,
+                Body = $"<html><body><p>{query.BodyText}</>%data%</body></html>"
             };
 
             foreach (var recip in query.Recipients) result.To.Add(new MailAddress(recip));
@@ -118,17 +140,18 @@ namespace SqlQueryNotifications
             return result;
         }
 
+        private void InsertData(MailMessage message, string content)
+        {
+            var sb = new StringBuilder(message.Body);
+            sb.Replace(data, content);
+            message.Body = sb.ToString();
+        }
+
         private string DataTableToHtml(DataTable dataTable, int maxRows)
         {
             var rows = dataTable.AsEnumerable().Take(maxRows);
             var html = new HtmlBuilder();
 
-            html.StartTag("html");
-
-            html.StartTag("head");
-            html.EndTag();
-
-            html.StartTag("body");
             html.StartTag("table");
 
             html.StartTag("tr");
@@ -143,8 +166,6 @@ namespace SqlQueryNotifications
             }
 
             html.EndTag(); // table
-            html.EndTag(); // body
-            html.EndTag(); // html
             return html.ToString();
         }
 

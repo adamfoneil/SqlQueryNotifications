@@ -16,6 +16,7 @@ namespace SqlQueryNotifications.Models
     {
         public IEnumerable<string> Recipients { get; set; }
         public string Subject { get; set; }
+        public string BodyText { get; set; }
         public string Sql { get; set; }
         public TriggerSendRule SendRule { get; set; }
 
