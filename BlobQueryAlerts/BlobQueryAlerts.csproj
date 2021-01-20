@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AO.SqlQueryAlerts" Version="1.0.0" />
+    <PackageReference Include="AO.SqlQueryAlerts" Version="1.0.1" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
   </ItemGroup>
 

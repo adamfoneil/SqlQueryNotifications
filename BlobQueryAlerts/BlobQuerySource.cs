@@ -1,10 +1,12 @@
 ﻿using Azure.Storage.Blobs;
+using BlobQueryAlerts.Exceptions;
 using Microsoft.Data.SqlClient;
 using SqlQueryNotifications.Interfaces;
 using SqlQueryNotifications.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SqlQueryNotifications
@@ -16,16 +18,20 @@ namespace SqlQueryNotifications
         private readonly string _containerName;
         private readonly string _blobPrefix;
 
+        private List<BlobQueryParseException> _loadExceptions = new List<BlobQueryParseException>();
+
         public BlobQuerySource(string azureConnectionString, string sqlConnectionString, string senderEmail, string containerName, string blobPrefix = null)
         {
             _azureConnectionString = azureConnectionString;
             _sqlConnectionString = sqlConnectionString;
             SenderEmail = senderEmail;
             _containerName = containerName;
-            _blobPrefix = blobPrefix;
+            _blobPrefix = blobPrefix;            
         }
 
         public string SenderEmail { get; }
+
+        public IEnumerable<BlobQueryParseException> LoadExceptions => _loadExceptions;
 
         public SqlConnection GetConnection() => new SqlConnection(_sqlConnectionString);
         
@@ -36,9 +42,33 @@ namespace SqlQueryNotifications
 
             List<Query> results = new List<Query>();
 
-            await foreach (var blob in pages)
-            {
+            _loadExceptions = new List<BlobQueryParseException>();
 
+            await foreach (var page in pages)
+            {
+                var blobs = page.Values;
+
+                foreach (var blob in blobs)
+                {
+                    var blobClient = new BlobClient(_azureConnectionString, _containerName, blob.Name);                    
+                    using (var input = await blobClient.OpenReadAsync())
+                    {
+                        using (var reader = new StreamReader(input))
+                        {
+                            var json = await reader.ReadToEndAsync();
+                            try
+                            {
+                                var query = JsonSerializer.Deserialize<Query>(json);
+                                results.Add(query);
+                            }
+                            catch (Exception exc)
+                            {
+                                _loadExceptions.Add(new BlobQueryParseException(blob, exc));
+                                continue;
+                            }
+                        }
+                    }
+                }             
             }
 
             return results;
