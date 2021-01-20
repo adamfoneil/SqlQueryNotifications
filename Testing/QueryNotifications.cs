@@ -106,7 +106,13 @@ namespace Testing
             using (var ms = new MemoryStream(bytes))
             {
                 blobClient.DeleteIfExists();
-                blobClient.Upload(ms);
+                blobClient.Upload(ms, new BlobUploadOptions()
+                {
+                    HttpHeaders = new BlobHttpHeaders()
+                    {
+                        ContentType = "application/json"
+                    }
+                });
             }            
         }
 
